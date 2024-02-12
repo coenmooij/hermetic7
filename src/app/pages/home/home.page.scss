@@ -6,6 +6,17 @@
   align-items: center;
   justify-content: center;
   background-color: navajowhite;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+a {
+  margin-bottom: 2rem;
+}
+
+canvas {
+  width: 16rem;
+  height: 16rem;
 }
 
 .yin-yang {

@@ -1,24 +1,44 @@
 <div class="container">
-  <a href="https://en.wikipedia.org/wiki/Hermetica">
-  <div class="yin-yang"></div>
-  </a>
-  <br><br>
-  <p>
-    Everything is dual
-    <br>
-    everything has poles
-    <br>
-    everything has its pair of opposites
-    <br>
-    like and unlike are the same
-    <br>
-    opposites are identical in nature, but different in degree
-    <br>
-    extremes meet
-    <br>
-    all truths are but half-truths
-    <br>
-    all paradoxes may be reconciled
-  </p>
 
+  <ng-container *ngIf="principle === 1">
+
+    <a href="https://en.wikipedia.org/wiki/The_Kybalion">
+      <canvas #canvas width="256" height="256"></canvas>
+    </a>
+
+    <p>
+      The All is Mind
+      <br>
+      the Universe is Mental
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="principle === 2">
+    <!--TODO : Implement this and other principles-->
+  </ng-container>
+
+  <ng-container *ngIf="principle === 4">
+    <a href="https://en.wikipedia.org/wiki/Hermetica">
+      <div class="yin-yang"></div>
+    </a>
+
+    <br><br>
+    <p>
+      Everything is dual
+      <br>
+      everything has poles
+      <br>
+      everything has its pair of opposites
+      <br>
+      like and unlike are the same
+      <br>
+      opposites are identical in nature, but different in degree
+      <br>
+      extremes meet
+      <br>
+      all truths are but half-truths
+      <br>
+      all paradoxes may be reconciled
+    </p>
+  </ng-container>
 </div>
