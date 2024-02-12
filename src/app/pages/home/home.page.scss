@@ -1,29 +1,71 @@
-@use 'colors';
-@use 'fonts';
-
 .container {
   height: 100%;
-  background: rgb(190, 158, 68);
-  background: linear-gradient(90deg, rgba(190, 158, 68, 1) 0%, rgba(216, 198, 144, 1) 50%, rgba(203, 178, 106, 1) 100%);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: navajowhite;
 }
 
-.logo {
-  user-select: none;
+.yin-yang {
+  position: relative;
+  background-color: white;
+  height: 16rem;
+  border-color: black;
+  border-style: solid;
+  width: 8rem;
+  border-width: 2px 8rem 2px 2px;
+  border-radius: 50%;
+  animation: roll 60s infinite;
+
+  &:hover {
+    background-color: black;
+    border-color: white;
+    border-width: 0 8rem 0 0;
+    box-shadow: 0 0 0 2px black;
+    margin: 2px 0;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    background-color: white;
+    border: 3rem solid #000;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: black;
+    border: 3rem solid white;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+  }
 }
 
-h1 {
-  color: colors.$gray-9;
-  text-transform: uppercase;
-  font-family: fonts.$title-font;
-  font-weight: 500;
-  font-size: 42px;
+p {
+  text-align: center;
+  text-wrap: balance;
+  line-height: 3rem;
+  font-size: 1.5rem;
+  letter-spacing: .072em;
 }
 
-h2 {
-  font-family: fonts.$title-font;
+
+@keyframes roll {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
