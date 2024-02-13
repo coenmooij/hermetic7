@@ -1,44 +1,58 @@
 <div class="container">
 
+  <a [href]="links[principle]">
+    <canvas *ngIf="principle === 1" #universe id="universe" width="256" height="256"></canvas>
+    <canvas #fractalTree id="reflected-fractal-tree" *ngIf="principle === 2" width="256" height="128"></canvas>
+    <div *ngIf="principle === 4" id="yin-yang"></div>
+  </a>
+
   <ng-container *ngIf="principle === 1">
-
-    <a href="https://en.wikipedia.org/wiki/The_Kybalion">
-      <canvas #canvas width="256" height="256"></canvas>
-    </a>
-
-    <p>
-      The All is Mind
-      <br>
-      the Universe is Mental
-    </p>
+    <p>The All is Mind;</p>
+    <p>the Universe is Mental.</p>
   </ng-container>
 
   <ng-container *ngIf="principle === 2">
-    <!--TODO : Implement this and other principles-->
+    <p>As above, so below;</p>
+    <p>as below, so above.</p>
+  </ng-container>
+
+  <ng-container *ngIf="principle === 3">
+    <p>Nothing rests;</p>
+    <p>everything moves;</p>
+    <p>everything vibrates.</p>
   </ng-container>
 
   <ng-container *ngIf="principle === 4">
-    <a href="https://en.wikipedia.org/wiki/Hermetica">
-      <div class="yin-yang"></div>
-    </a>
+    <p>Everything is dual;</p>
+    <p>everything has poles;</p>
+    <p>everything has its pair of opposites;</p>
+    <p>like and unlike are the same;</p>
+    <p>opposites are identical in nature, but different in degree;</p>
+    <p>extremes meet;</p>
+    <p>all truths are but half-truths;</p>
+    <p>all paradoxes may be reconciled.</p>
+  </ng-container>
 
-    <br><br>
-    <p>
-      Everything is dual
-      <br>
-      everything has poles
-      <br>
-      everything has its pair of opposites
-      <br>
-      like and unlike are the same
-      <br>
-      opposites are identical in nature, but different in degree
-      <br>
-      extremes meet
-      <br>
-      all truths are but half-truths
-      <br>
-      all paradoxes may be reconciled
-    </p>
+  <ng-container *ngIf="principle === 5">
+    <p>Everything flows, out and in;</p>
+    <p>everything has its tides;</p>
+    <p>all things rise and fall;</p>
+    <p>the pendulum-swing manifests in everything;</p>
+    <p>the measure of the swing to the right is the measure of the swing to the left;</p>
+    <p>rhythm compensates.</p>
+  </ng-container>
+
+  <ng-container *ngIf="principle === 6">
+    <p>Every cause has its effect;</p>
+    <p>every effect has its cause;</p>
+    <p>everything happens according to law;</p>
+    <p>chance is but a name for law not recognized;</p>
+    <p>there are many planes of causation, but nothing escapes the law.</p>
+  </ng-container>
+
+  <ng-container *ngIf="principle === 7">
+    <p>Gender is in everything;</p>
+    <p>everything has its masculine and feminine principles;</p>
+    <p>gender manifests on all planes.</p>
   </ng-container>
 </div>
