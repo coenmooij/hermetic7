@@ -10,6 +10,7 @@ export class HomePage implements OnInit, AfterViewInit {
   @ViewChild('universe') public universe?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fractalTree') public fractalTree?: ElementRef<HTMLCanvasElement>;
   @ViewChild('vibrations') public vibrations?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pendulum') public pendulum?: ElementRef<HTMLCanvasElement>;
 
   public principle: number = 0;
   public links: string[] = [
@@ -30,10 +31,53 @@ export class HomePage implements OnInit, AfterViewInit {
     this.drawUniverse();
     this.drawFractalTree();
     this.drawVibrations();
+    this.drawPendulum();
   }
 
   private pickRandomNumber(): void {
     this.principle = this.randomNumber(1, 7);
+  }
+
+  private drawPendulum(): void {
+    if (!this.pendulum) {
+      return;
+    }
+    const context: CanvasRenderingContext2D = this.pendulum.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    context.strokeStyle = 'black';
+    context.lineWidth = 4;
+
+    const radius: number = 16;
+
+    let ballOrbit: number = 1;
+    let ballDirection: 'left' | 'right' = 'right';
+    const pendulumLength: number = CANVAS_SIZE * .9;
+
+    setInterval((): void => {
+      if (ballDirection === 'left') {
+        if (ballOrbit === 1) {
+          ballDirection = 'right';
+        } else {
+          ballOrbit--;
+        }
+      } else if (ballOrbit === 180) {
+        ballDirection = 'left';
+      } else {
+        ballOrbit++;
+      }
+
+      context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      context.lineWidth = 2;
+      context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      context.stroke();
+
+      context.lineWidth = 1;
+      const x: number = this.calculateBallX(ballOrbit, radius);
+      const deltaX: number = Math.abs(x - CANVAS_SIZE / 2);
+      const y: number = Math.sqrt(Math.pow(pendulumLength, 2) - Math.pow(deltaX, 2));
+
+      this.drawLine(context, CANVAS_SIZE / 2, 0, x, y);
+      this.drawMoon(context, x, y, radius, 'sandybrown');
+    }, 12);
   }
 
   private drawUniverse(): void {
@@ -79,41 +123,36 @@ export class HomePage implements OnInit, AfterViewInit {
     const context: CanvasRenderingContext2D = this.vibrations.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     context.strokeStyle = 'black';
 
-    const ballRadius: number = 8;
-    let ballOrbit: number = 1;
-    let ballDirection: 'left' | 'right' = 'right';
+    const radius: number = 12;
+    let orbit: number = 1;
+    let direction: 'left' | 'right' = 'right';
 
     setInterval((): void => {
-      if (ballDirection === 'left') {
-        if (ballOrbit === 1) {
-          ballDirection = 'right';
-        } else {
-          ballOrbit--;
-        }
-      } else if (ballOrbit === 180) {
-        ballDirection = 'left';
-      } else {
-        ballOrbit++;
+      direction === 'left' ? orbit-- : orbit++;
+      if (orbit === 0) {
+        direction = 'right';
+      } else if (orbit === 180) {
+        direction = 'left';
       }
-      const ballX: number = this.calculateBallX(ballOrbit, ballRadius);
-      const ballY: number = this.calculateBallY(ballOrbit, ballRadius, ballDirection);
+      const ballX: number = this.calculateBallX(orbit, radius);
+      const ballY: number = this.calculateMoonY(orbit, radius, direction);
       context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-      if (ballDirection === 'left') {
-        this.drawMoon(context, ballX, ballY, ballRadius);
-        this.drawPlanet(context, ballRadius);
+      if (direction === 'left') {
+        this.drawMoon(context, ballX, ballY, radius, 'darkturquoise');
+        this.drawPlanet(context, radius);
       } else {
-        this.drawPlanet(context, ballRadius);
-        this.drawMoon(context, ballX, ballY, ballRadius);
+        this.drawPlanet(context, radius);
+        this.drawMoon(context, ballX, ballY, radius, 'turquoise');
       }
     }, 16);
   }
 
-  private drawMoon(context: CanvasRenderingContext2D, x: number, y: number, radius: number): void {
+  private drawMoon(context: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string): void {
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI, false);
     context.closePath();
-    context.fillStyle = 'darkturquoise';
+    context.fillStyle = color;
     context.fill();
     context.stroke();
   }
@@ -132,10 +171,14 @@ export class HomePage implements OnInit, AfterViewInit {
     return (ballOrbit / 180) * (CANVAS_SIZE - (ballRadius * 2)) + ballRadius;
   }
 
-  private calculateBallY(ballOrbit: number, ballRadius: number, direction: 'left' | 'right'): number {
-    const amplitude: number = Math.sin(this.degreesToRadians(ballOrbit)) * ballRadius * 3;
+  private calculateMoonY(ballOrbit: number, ballRadius: number, direction: 'left' | 'right'): number {
+    const amplitude: number = this.calculateAmplitude(ballOrbit) * ballRadius * 2;
     const directionFactor: number = direction === 'left' ? -1 : 1;
     return CANVAS_SIZE / 2 + (directionFactor * amplitude);
+  }
+
+  private calculateAmplitude(ballOrbit: number): number {
+    return Math.sin(this.degreesToRadians(ballOrbit));
   }
 
   private drawTree(context: CanvasRenderingContext2D, xStart: number, yStart: number, angle: number, depth: number): void {
