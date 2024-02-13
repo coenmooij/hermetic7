@@ -1,11 +1,12 @@
 <div class="container">
 
-  <a [href]="links[principle]">
+  <a [href]="links[principle + 1]">
     <canvas *ngIf="principle === 1" #universe id="universe" width="256" height="256"></canvas>
     <canvas #fractalTree id="reflected-fractal-tree" *ngIf="principle === 2" width="256" height="128"></canvas>
     <canvas #vibrations id="vibrations" *ngIf="principle === 3" width="256" height="256"></canvas>
-    <div *ngIf="principle === 4" id="yin-yang"></div>
+    <div *ngIf="principle === 4 || principle === 7" id="yin-yang"></div>
     <canvas *ngIf="principle === 5" #pendulum id="pendulum" width="256" height="256"></canvas>
+    <canvas #causation *ngIf="principle === 6" id="causation" width="256" height="256"></canvas>
   </a>
 
   <ng-container *ngIf="principle === 1">

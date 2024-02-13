@@ -11,16 +11,17 @@ export class HomePage implements OnInit, AfterViewInit {
   @ViewChild('fractalTree') public fractalTree?: ElementRef<HTMLCanvasElement>;
   @ViewChild('vibrations') public vibrations?: ElementRef<HTMLCanvasElement>;
   @ViewChild('pendulum') public pendulum?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('causation') public causation?: ElementRef<HTMLCanvasElement>;
 
   public principle: number = 0;
   public links: string[] = [
     'https://en.wikipedia.org/wiki/The_Kybalion',
     'https://en.wikipedia.org/wiki/Hermes_Trismegistus',
+    'https://en.wikipedia.org/wiki/Count_of_St._Germain',
     'https://en.wikipedia.org/wiki/Emerald_Tablet',
     'https://en.wikipedia.org/wiki/Corpus_Hermeticum',
-    'https://en.wikipedia.org/wiki/Count_of_St._Germain',
-    'https://en.wikipedia.org/wiki/Queen_of_Sheba',
-    'https://en.wikipedia.org/wiki/Solomon'
+    'https://en.wikipedia.org/wiki/Solomon',
+    'https://en.wikipedia.org/wiki/Queen_of_Sheba'
   ];
 
   public ngOnInit(): void {
@@ -32,10 +33,85 @@ export class HomePage implements OnInit, AfterViewInit {
     this.drawFractalTree();
     this.drawVibrations();
     this.drawPendulum();
+    this.drawCausation();
   }
 
   private pickRandomNumber(): void {
     this.principle = this.randomNumber(1, 7);
+  }
+
+  private drawCausation(): void {
+    if (!this.causation) {
+      return;
+    }
+
+    const context: CanvasRenderingContext2D = this.causation.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    const radius: number = 16;
+    const startingY: number = CANVAS_SIZE * .25;
+    const centerX: number = CANVAS_SIZE / 2;
+    const pendulumLength: number = CANVAS_SIZE * .5;
+
+    let progress: number = 0;
+    let direction: 'left' | 'right' = 'right';
+
+    setInterval((): void => {
+      direction === 'left' ? progress-- : progress++;
+      if (progress === -1) {
+        direction = 'right';
+      } else if (progress === 100) {
+        direction = 'left';
+      }
+
+      this.drawSquare(context);
+
+      const spaceAvailable: number = (CANVAS_SIZE / 2) - (4 * radius);
+
+      const leftXDeviation: number = progress >= 50 ? this.getXDeviation(progress) : 0;
+      const leftX: number = spaceAvailable * leftXDeviation;
+
+      const rightXDeviation: number = progress < 50 ? this.getXDeviation(progress) : 0;
+      const rightX: number = spaceAvailable * rightXDeviation;
+
+      this.drawLine(context, 0, 0, centerX - (radius * 3), startingY);
+      this.drawLine(context, centerX - (radius * 3), startingY, centerX + (radius * 3), startingY);
+      this.drawLine(context, CANVAS_SIZE, 0, centerX + (radius * 3), startingY);
+
+      this.drawCausationPendulum(context, centerX - (radius * 3), startingY, leftX, pendulumLength, radius);
+      this.drawCausationPendulum(context, centerX - radius, startingY, 0, pendulumLength, radius);
+      this.drawCausationPendulum(context, centerX + radius, startingY, 0, pendulumLength, radius);
+      this.drawCausationPendulum(context, centerX + (radius * 3), startingY, rightX, pendulumLength, radius);
+    }, 12);
+  }
+
+  private drawCausationPendulum(
+    context: CanvasRenderingContext2D,
+    startX: number,
+    startY: number,
+    pendulumXDeviation: number,
+    pendulumLength: number,
+    radius: number
+  ): void {
+
+    let x: number = startX + pendulumXDeviation;
+    const y: number = startY + this.pythagoras(pendulumLength, Math.abs(pendulumXDeviation));
+
+    this.drawLine(context, startX, startY, x, y);
+    this.drawMoon(context, x, y, radius, 'sandybrown');
+  }
+
+  private pythagoras(c: number, a: number): number {
+    return Math.sqrt(Math.pow(c, 2) - Math.pow(a, 2));
+  }
+
+  private getXDeviation(progress: number): number {
+    const radians: number = progress / 100 * Math.PI;
+    return Math.cos(radians);
+  }
+
+  private drawSquare(context: CanvasRenderingContext2D): void {
+    context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    context.stroke();
   }
 
   private drawPendulum(): void {
@@ -43,9 +119,6 @@ export class HomePage implements OnInit, AfterViewInit {
       return;
     }
     const context: CanvasRenderingContext2D = this.pendulum.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    context.strokeStyle = 'black';
-    context.lineWidth = 4;
-
     const radius: number = 16;
 
     let ballOrbit: number = 1;
@@ -53,24 +126,15 @@ export class HomePage implements OnInit, AfterViewInit {
     const pendulumLength: number = CANVAS_SIZE * .9;
 
     setInterval((): void => {
-      if (ballDirection === 'left') {
-        if (ballOrbit === 1) {
-          ballDirection = 'right';
-        } else {
-          ballOrbit--;
-        }
+      ballDirection === 'left' ? ballOrbit-- : ballOrbit++;
+      if (ballOrbit === 0) {
+        ballDirection = 'right';
       } else if (ballOrbit === 180) {
         ballDirection = 'left';
-      } else {
-        ballOrbit++;
       }
 
-      context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      context.lineWidth = 2;
-      context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-      context.stroke();
+      this.drawSquare(context);
 
-      context.lineWidth = 1;
       const x: number = this.calculateBallX(ballOrbit, radius);
       const deltaX: number = Math.abs(x - CANVAS_SIZE / 2);
       const y: number = Math.sqrt(Math.pow(pendulumLength, 2) - Math.pow(deltaX, 2));
@@ -99,7 +163,6 @@ export class HomePage implements OnInit, AfterViewInit {
       context.lineTo(x, y);
     }
     context.rect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-    context.strokeStyle = 'black';
     context.stroke();
   }
 
@@ -108,7 +171,6 @@ export class HomePage implements OnInit, AfterViewInit {
       return;
     }
     const context: CanvasRenderingContext2D = this.fractalTree.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    context.strokeStyle = 'black';
     context.fillStyle = 'sandybrown';
 
     this.drawHalfCircle(context);
@@ -121,8 +183,6 @@ export class HomePage implements OnInit, AfterViewInit {
       return;
     }
     const context: CanvasRenderingContext2D = this.vibrations.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    context.strokeStyle = 'black';
-
     const radius: number = 12;
     let orbit: number = 1;
     let direction: 'left' | 'right' = 'right';
