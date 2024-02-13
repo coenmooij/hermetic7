@@ -9,6 +9,8 @@
     <canvas #causation *ngIf="principle === 6" id="causation" width="256" height="256"></canvas>
   </a>
 
+  <h1>{{ principle }}.</h1>
+
   <ng-container *ngIf="principle === 1">
     <p>The All is Mind;</p>
     <p>the Universe is Mental.</p>
@@ -58,4 +60,9 @@
     <p>everything has its masculine and feminine principles;</p>
     <p>gender manifests on all planes.</p>
   </ng-container>
+
+  <div class="navigation">
+    <button class="button" (click)="onPrevious()">< Previous</button>
+    <button class="button" (click)="onNext()">Next ></button>
+  </div>
 </div>

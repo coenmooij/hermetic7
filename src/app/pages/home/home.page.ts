@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
 const CANVAS_SIZE: number = 256;
 
@@ -7,6 +7,17 @@ const CANVAS_SIZE: number = 256;
   styleUrls: ['home.page.scss']
 })
 export class HomePage implements OnInit, AfterViewInit {
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    console.log(event.key);
+    if(event.key === 'ArrowRight') {
+      this.onNext();
+    }
+    if(event.key === 'ArrowLeft') {
+      this.onPrevious();
+    }
+  }
+
   @ViewChild('universe') public universe?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fractalTree') public fractalTree?: ElementRef<HTMLCanvasElement>;
   @ViewChild('vibrations') public vibrations?: ElementRef<HTMLCanvasElement>;
@@ -29,11 +40,16 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    this.onLoad();
+  }
+
+  private onLoad(): void {
     this.drawUniverse();
     this.drawFractalTree();
     this.drawVibrations();
     this.drawPendulum();
     this.drawCausation();
+    this.scrollToTop();
   }
 
   private pickRandomNumber(): void {
@@ -199,11 +215,11 @@ export class HomePage implements OnInit, AfterViewInit {
       context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
       if (direction === 'left') {
-        this.drawMoon(context, ballX, ballY, radius, 'darkturquoise');
+        this.drawMoon(context, ballX, ballY, radius, 'darkslateblue');
         this.drawPlanet(context, radius);
       } else {
         this.drawPlanet(context, radius);
-        this.drawMoon(context, ballX, ballY, radius, 'turquoise');
+        this.drawMoon(context, ballX, ballY, radius, 'slateblue');
       }
     }, 16);
   }
@@ -289,5 +305,25 @@ export class HomePage implements OnInit, AfterViewInit {
 
   private randomNumber(min: number, max: number): number {
     return min + Math.floor(Math.random() * (max + 1 - min));
+  }
+
+  public onPrevious(): void {
+    this.principle--;
+    if (this.principle < 1) {
+      this.principle = 7;
+    }
+    setTimeout(() => this.onLoad(),0);
+  }
+
+  public onNext(): void {
+    this.principle++;
+    if (this.principle > 7) {
+      this.principle = 1;
+    }
+    setTimeout(() => this.onLoad(),0);
+  }
+
+  private scrollToTop():void {
+    window.scroll({ top: 0, behavior: 'smooth' });
   }
 }

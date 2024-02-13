@@ -9,23 +9,67 @@
   box-sizing: border-box;
 }
 
+.navigation {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  justify-content: space-between;
+  max-width: 32rem;
+  margin-top: 4rem;
+}
+
+.button {
+  background-color: transparent;
+  color: lightslategrey;
+  text-decoration: underline;
+  box-shadow: none;
+  border: none;
+  padding: .8rem 1.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: .4rem;
+
+  &:hover {
+    color: slategrey;
+  }
+}
+
+h1 {
+  font-weight: normal;
+  font-family: serif;
+  font-size: 3rem;
+  margin-bottom: 0;
+  line-height: 4rem;
+  color: black;
+  border-radius: 1rem;
+}
+
 a {
   margin-bottom: 2rem;
+  line-height: 1;
+  padding:0;
+
+  &:hover {
+    box-shadow: 0 0 20px 5px #50C878;
+    border-radius: 0;
+  }
 }
 
 #reflected-fractal-tree {
   width: 16rem;
   height: 8rem;
   margin-bottom: 8rem;
-  -webkit-box-reflect: below 0 linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+  -webkit-box-reflect: below 0 linear-gradient(to bottom, rgba(0, 0, 0, 0%), rgba(0, 0, 0, 40%));
 }
 
-#vibrations, #pendulum, #universe {
+#vibrations, #pendulum, #universe, #causation {
   width: 16rem;
   height: 16rem;
+  margin-bottom: -4px;
 }
 
 #yin-yang {
+  box-sizing: content-box;
   position: relative;
   background-color: white;
   height: 16rem;
