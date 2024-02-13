@@ -3,6 +3,7 @@
   <a [href]="links[principle]">
     <canvas *ngIf="principle === 1" #universe id="universe" width="256" height="256"></canvas>
     <canvas #fractalTree id="reflected-fractal-tree" *ngIf="principle === 2" width="256" height="128"></canvas>
+    <canvas #vibrations id="vibrations" *ngIf="principle === 3" width="256" height="256"></canvas>
     <div *ngIf="principle === 4" id="yin-yang"></div>
   </a>
 

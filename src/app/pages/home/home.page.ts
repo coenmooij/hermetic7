@@ -9,6 +9,7 @@ const CANVAS_SIZE: number = 256;
 export class HomePage implements OnInit, AfterViewInit {
   @ViewChild('universe') public universe?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fractalTree') public fractalTree?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('vibrations') public vibrations?: ElementRef<HTMLCanvasElement>;
 
   public principle: number = 0;
   public links: string[] = [
@@ -28,6 +29,7 @@ export class HomePage implements OnInit, AfterViewInit {
   public ngAfterViewInit(): void {
     this.drawUniverse();
     this.drawFractalTree();
+    this.drawVibrations();
   }
 
   private pickRandomNumber(): void {
@@ -64,26 +66,89 @@ export class HomePage implements OnInit, AfterViewInit {
     const context: CanvasRenderingContext2D = this.fractalTree.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     context.strokeStyle = 'black';
     context.fillStyle = 'sandybrown';
-    context.lineWidth = 1;
 
     this.drawHalfCircle(context);
     this.drawHalfCircle(context);
     this.drawTree(context, CANVAS_SIZE / 2, CANVAS_SIZE / 2, -90, 11);
-
-
   }
 
-  public drawTree(context: CanvasRenderingContext2D, xStart: number, yStart: number, angle: number, depth: number): void {
+  private drawVibrations(): void {
+    if (!this.vibrations) {
+      return;
+    }
+    const context: CanvasRenderingContext2D = this.vibrations.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    context.strokeStyle = 'black';
+
+    const ballRadius: number = 8;
+    let ballOrbit: number = 1;
+    let ballDirection: 'left' | 'right' = 'right';
+
+    setInterval((): void => {
+      if (ballDirection === 'left') {
+        if (ballOrbit === 1) {
+          ballDirection = 'right';
+        } else {
+          ballOrbit--;
+        }
+      } else if (ballOrbit === 180) {
+        ballDirection = 'left';
+      } else {
+        ballOrbit++;
+      }
+      const ballX: number = this.calculateBallX(ballOrbit, ballRadius);
+      const ballY: number = this.calculateBallY(ballOrbit, ballRadius, ballDirection);
+      context.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+      if (ballDirection === 'left') {
+        this.drawMoon(context, ballX, ballY, ballRadius);
+        this.drawPlanet(context, ballRadius);
+      } else {
+        this.drawPlanet(context, ballRadius);
+        this.drawMoon(context, ballX, ballY, ballRadius);
+      }
+    }, 16);
+  }
+
+  private drawMoon(context: CanvasRenderingContext2D, x: number, y: number, radius: number): void {
+    context.beginPath();
+    context.arc(x, y, radius, 0, 2 * Math.PI, false);
+    context.closePath();
+    context.fillStyle = 'darkturquoise';
+    context.fill();
+    context.stroke();
+  }
+
+  private drawPlanet(context: CanvasRenderingContext2D, ballRadius: number): void {
+    context.beginPath();
+    context.arc(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 2 - ballRadius * 4, 0, 2 * Math.PI, false);
+    context.closePath();
+    context.fillStyle = 'sandybrown';
+    context.fill();
+    context.stroke();
+  }
+
+
+  private calculateBallX(ballOrbit: number, ballRadius: number): number {
+    return (ballOrbit / 180) * (CANVAS_SIZE - (ballRadius * 2)) + ballRadius;
+  }
+
+  private calculateBallY(ballOrbit: number, ballRadius: number, direction: 'left' | 'right'): number {
+    const amplitude: number = Math.sin(this.degreesToRadians(ballOrbit)) * ballRadius * 3;
+    const directionFactor: number = direction === 'left' ? -1 : 1;
+    return CANVAS_SIZE / 2 + (directionFactor * amplitude);
+  }
+
+  private drawTree(context: CanvasRenderingContext2D, xStart: number, yStart: number, angle: number, depth: number): void {
 
     const branchLength: number = this.randomNumber(0, 2);
 
     if (depth !== 0) {
-      const x2: number = xStart + (this.cos(angle) * depth * branchLength);
-      const y2: number = yStart + (this.sin(angle) * depth * branchLength);
+      const xEnd: number = xStart + (this.cos(angle) * depth * branchLength);
+      const yEnd: number = yStart + (this.sin(angle) * depth * branchLength);
 
-      this.drawLine(context, xStart, yStart, x2, y2);
-      this.drawTree(context, x2, y2, angle - this.randomNumber(15, 20), depth - 1);
-      this.drawTree(context, x2, y2, angle + this.randomNumber(15, 20), depth - 1);
+      this.drawLine(context, xStart, yStart, xEnd, yEnd);
+      this.drawTree(context, xEnd, yEnd, angle - this.randomNumber(15, 20), depth - 1);
+      this.drawTree(context, xEnd, yEnd, angle + this.randomNumber(15, 20), depth - 1);
     }
   }
 
