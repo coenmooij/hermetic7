@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "coenmooij.nl": {
+    "hermetic7": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/coenmooij.nl",
+            "outputPath": "dist/hermetic7",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "coenmooij.nl:build:production"
+              "buildTarget": "hermetic7:build:production"
             },
             "development": {
-              "buildTarget": "coenmooij.nl:build:development"
+              "buildTarget": "hermetic7:build:development"
             }
           },
           "defaultConfiguration": "development"
