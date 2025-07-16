@@ -4,16 +4,16 @@ const CANVAS_SIZE: number = 256;
 
 @Component({
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit, AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     console.log(event.key);
-    if(event.key === 'ArrowRight') {
+    if (event.key === 'ArrowRight') {
       this.onNext();
     }
-    if(event.key === 'ArrowLeft') {
+    if (event.key === 'ArrowLeft') {
       this.onPrevious();
     }
   }
@@ -32,7 +32,7 @@ export class HomePage implements OnInit, AfterViewInit {
     'https://en.wikipedia.org/wiki/Emerald_Tablet',
     'https://en.wikipedia.org/wiki/Corpus_Hermeticum',
     'https://en.wikipedia.org/wiki/Solomon',
-    'https://en.wikipedia.org/wiki/Queen_of_Sheba'
+    'https://en.wikipedia.org/wiki/Queen_of_Sheba',
   ];
 
   public ngOnInit(): void {
@@ -105,7 +105,7 @@ export class HomePage implements OnInit, AfterViewInit {
     startY: number,
     pendulumXDeviation: number,
     pendulumLength: number,
-    radius: number
+    radius: number,
   ): void {
 
     let x: number = startX + pendulumXDeviation;
@@ -312,7 +312,7 @@ export class HomePage implements OnInit, AfterViewInit {
     if (this.principle < 1) {
       this.principle = 7;
     }
-    setTimeout(() => this.onLoad(),0);
+    setTimeout(() => this.onLoad(), 0);
   }
 
   public onNext(): void {
@@ -320,10 +320,10 @@ export class HomePage implements OnInit, AfterViewInit {
     if (this.principle > 7) {
       this.principle = 1;
     }
-    setTimeout(() => this.onLoad(),0);
+    setTimeout(() => this.onLoad(), 0);
   }
 
-  private scrollToTop():void {
-    window.scroll({ top: 0, behavior: 'smooth' });
+  private scrollToTop(): void {
+    window.scroll({top: 0, behavior: 'smooth'});
   }
 }

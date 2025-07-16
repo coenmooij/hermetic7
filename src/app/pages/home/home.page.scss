@@ -19,18 +19,19 @@
 }
 
 .button {
-  background-color: transparent;
-  color: lightslategrey;
-  text-decoration: underline;
+  background-color: lighten(navajowhite, 3%);
+  color: darken(navajowhite, 50%);
+  text-decoration: none;
   box-shadow: none;
-  border: none;
-  padding: .8rem 1.6rem;
-  font-size: 1rem;
+  border: 1px solid darken(navajowhite, 50%);
+  padding: 1.2rem 2rem;
+  font-size: 2rem;
   cursor: pointer;
   border-radius: .4rem;
 
   &:hover {
-    color: slategrey;
+    box-shadow: 0 0 10px 2px #50C878;
+    color: sandybrown;
   }
 }
 
@@ -47,7 +48,7 @@ h1 {
 a {
   margin-bottom: 2rem;
   line-height: 1;
-  padding:0;
+  padding: 0;
 
   &:hover {
     box-shadow: 0 0 20px 5px #50C878;
@@ -91,7 +92,7 @@ a {
   &:before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 50%;
     background-color: white;
     border: 3rem solid #000;
@@ -103,7 +104,7 @@ a {
   &:after {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 0%;
     left: 50%;
     background-color: black;
     border: 3rem solid white;
